@@ -5,46 +5,67 @@
 :: Page Name 1
 :: Page Name 2
 */
+
+
 /* -----------------------------------------
    Shared Styles
 ----------------------------------------- */
+
 body {
-  font-family: 'Open Sans', sans-serif; }
-  body header#title {
+      font-family: 'Open Sans', sans-serif;
+
+  header#title {
     padding: 10px;
     background: #f5f5f5;
-    border-bottom: 1px solid #666; }
-    body header#title h1 {
+    border-bottom: 1px solid #666;
+    h1 {
       margin: 0px;
       font-family: 'Open Sans', sans-serif;
       font-weight: 200;
-      font-size: 30px; }
-    body header#title nav ul {
-      list-style: none;
-      float: right;
-      margin-top: 5px; }
-      body header#title nav ul li {
-        display: inline-block;
-        margin-right: 28px;
-        text-transform: uppercase; }
-  body header.article {
+      font-size: 30px;
+    }
+
+    nav {
+      ul {
+        list-style: none;
+        float: right;
+        margin-top: 5px;
+        li {
+          display: inline-block;
+          margin-right: 28px;
+          text-transform: uppercase;
+        }
+      }
+    }
+  }
+
+  header.article {
     margin-top: 35px;
-    text-align: center; }
-    body header.article h1 {
+    h1 {
       font-family: 'Open Sans', sans-serif;
       font-weight: 700;
       font-size: 40px;
-      text-transform: uppercase; }
-  body p.datestamp {
+      text-transform: uppercase;
+    }
+
+    text-align: center;
+  }
+
+  p.datestamp {
     border-top: 1px solid #000;
     text-align: center;
-    margin-top: 20px; }
-    body p.datestamp span {
+    margin-top: 20px;
+    span {
       position: relative;
       top: -12px;
       padding-left: 20px;
       padding-right: 20px;
       background: #fff;
-      width: 180px; }
-  body p.content {
-    font-size: 20px; }
+      width: 180px;
+    }
+  }
+
+  p.content {
+    font-size: 20px;
+  }
+}

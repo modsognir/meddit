@@ -1,38 +1,61 @@
-;(function ($, window, undefined) {
-  'use strict';
+var Meddit = {
+  fetch: function(id, after) {
+    var url = "http://www.reddit.com/r/funny.json?jsonp=?&after=" + id + "&count=" + after
+    console.log("Fetching: " + url)
 
-  var $doc = $(document),
-      Modernizr = window.Modernizr;
+    $.getJSON(url, this.handle_data)
+  },
 
-  $(document).ready(function() {
-    $.fn.foundationAlerts           ? $doc.foundationAlerts() : null;
-    $.fn.foundationButtons          ? $doc.foundationButtons() : null;
-    $.fn.foundationAccordion        ? $doc.foundationAccordion() : null;
-    $.fn.foundationNavigation       ? $doc.foundationNavigation() : null;
-    $.fn.foundationTopBar           ? $doc.foundationTopBar() : null;
-    $.fn.foundationCustomForms      ? $doc.foundationCustomForms() : null;
-    $.fn.foundationMediaQueryViewer ? $doc.foundationMediaQueryViewer() : null;
-    $.fn.foundationTabs             ? $doc.foundationTabs({callback : $.foundation.customForms.appendCustomMarkup}) : null;
-    $.fn.foundationTooltips         ? $doc.foundationTooltips() : null;
-    $.fn.foundationMagellan         ? $doc.foundationMagellan() : null;
-    $.fn.foundationClearing         ? $doc.foundationClearing() : null;
+  handle_data: function(data) { 
+    console.log(data.data.children)
 
-    $.fn.placeholder                ? $('input, textarea').placeholder() : null;
-  });
+    $.each(data.data.children, function(index, val) {
+      $("#sidebar ul").append("<li><a href='" + val.data.url + "' data-id='" + val.data.name + "' data-index='" + (index+1) + "'>" + val.data.title + "</a></ul>")
+    })
 
-  // UNCOMMENT THE LINE YOU WANT BELOW IF YOU WANT IE8 SUPPORT AND ARE USING .block-grids
-  // $('.block-grid.two-up>li:nth-child(2n+1)').css({clear: 'both'});
-  // $('.block-grid.three-up>li:nth-child(3n+1)').css({clear: 'both'});
-  // $('.block-grid.four-up>li:nth-child(4n+1)').css({clear: 'both'});
-  // $('.block-grid.five-up>li:nth-child(5n+1)').css({clear: 'both'});
+    $('a').click(function(e) {
+      e.preventDefault();
 
-  // Hide address bar on mobile devices (except if #hash present, so we don't mess up deep linking).
-  if (Modernizr.touch && !window.location.hash) {
-    $(window).load(function () {
-      setTimeout(function () {
-        window.scrollTo(0, 1);
-      }, 0);
+      var el = $(e.target);
+
+      $('#content iframe').attr('src', el.attr('href'));
+      $('.article_title h1').text(el.text());
+      $('li.selected').attr('class', '')
+      $(el).parent().attr('class', 'selected')
+
+      if ($('li.selected').is(':last-child')) {
+        Meddit.fetch($('li.selected a').attr('data-id'), $('li.selected a').attr('data-index'))
+      }
     });
-  }
 
-})(jQuery, this);
+
+    $('li').click(function(e) {
+      $(e.target).children('a').click();
+    })
+
+    if ($('li.selected')[0] == undefined) {
+      $('#sidebar li')[0].click();
+    }
+  },
+
+  get_response: function() { this.response }
+};
+
+
+$(document).ready(function() {
+  Meddit.fetch();
+
+  $('iframe').height($(window).height() - 53);
+
+  Mousetrap.bind('down', function() {
+    el = $('li.selected').next();
+    el.click();
+    document.getElementById('sidebar').scrollTop += el.height();
+  })
+
+  Mousetrap.bind('up', function() {
+    el = $('li.selected').prev();
+    el.click();
+    document.getElementById('sidebar').scrollTop -= el.height();
+  })
+})

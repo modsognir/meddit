@@ -26,6 +26,7 @@ var Meddit = {
       if ($('li.selected').is(':last-child')) {
         Meddit.fetch($('li.selected a').attr('data-id'), $('li.selected a').attr('data-index'))
       }
+
     });
 
 
@@ -50,12 +51,12 @@ $(document).ready(function() {
   Mousetrap.bind('down', function() {
     el = $('li.selected').next();
     el.click();
-    document.getElementById('sidebar').scrollTop += el.height();
-  })
+    document.getElementById('sidebar').scrollTop += el.offset().top - 73;
+  });
 
   Mousetrap.bind('up', function() {
     el = $('li.selected').prev();
     el.click();
-    document.getElementById('sidebar').scrollTop -= el.height();
-  })
+    document.getElementById('sidebar').scrollTop += el.offset().top - 73;
+  });
 })
